@@ -1,0 +1,51 @@
+plugins {
+    id 'maven-publish'
+    id 'java'
+    id 'java-library'
+}
+
+group 'com.winston.code'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    implementation group: 'org.mybatis', name: 'mybatis', version: '3.5.6'
+    implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.23'
+
+    implementation 'org.projectlombok:lombok:1.18.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.6'
+
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
+    runtimeOnly 'com.oracle.ojdbc:ojdbc8:19.3.0.0'
+    runtimeOnly 'mysql:mysql-connector-java:5.1.49'
+
+}
+
+task generateSourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            //groupId = 'com.winston.code'
+            //artifactId = 'generator-core'
+            from(components.java)
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.build {
+    dependsOn publishToMavenLocal
+}
